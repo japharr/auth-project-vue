@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from "vue-router";
-
+import store from "../store/index";
 // const routes = [
 //   {
 //     path: "/",
@@ -21,13 +21,21 @@ const routes = [
     component: () => import("../views/Home"),
   },
   {
-    path: "/signup",
-    name: "signup",
-    component: () => import("../views/Signup"),
+    path: "/posts",
+    name: "posts",
+    meta: { requiresAuth: true },
+    component: () => import("../views/Posts"),
+  },
+  {
+    path: "/register",
+    name: "register",
+    meta: { guest: true },
+    component: () => import("../views/Register"),
   },
   {
     path: "/login",
     name: "login",
+    meta: { guest: true },
     component: () => import("../views/Login"),
   },
   {
@@ -40,6 +48,30 @@ const routes = [
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes,
+});
+
+router.beforeEach((to, from, next) => {
+  if (to.matched.some((record) => record.meta.requiresAuth)) {
+    if (store.getters.isAuthenticated) {
+      next();
+      return;
+    }
+    next("/login");
+  } else {
+    next();
+  }
+});
+
+router.beforeEach((to, from, next) => {
+  if (to.matched.some((record) => record.meta.guest)) {
+    if (store.getters.isAuthenticated) {
+      next("/posts");
+      return;
+    }
+    next();
+  } else {
+    next();
+  }
 });
 
 export default router;

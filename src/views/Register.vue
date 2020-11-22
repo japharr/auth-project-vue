@@ -2,8 +2,18 @@
   <div class="w-full">
     <div class="z-30 m-auto bg-white p-2 rounded shadow w-1/3">
       <div class="p-2 border">
-        <h1 class="text-2xl text-center">Login</h1>
+        <h1 class="text-2xl text-center">Register</h1>
         <form class="p-2" @submit.prevent="submit()">
+          <div class="my-4">
+            <label for="">Fullname</label>
+            <input
+              class="rounded shadow p-2 w-full"
+              type="text"
+              ref="emailRef"
+              v-model="state.form.full_name"
+              placeholder="Enter your fullname"
+            />
+          </div>
           <div class="my-4">
             <label for="">Email or Username</label>
             <input
@@ -30,12 +40,11 @@
               :class="isLoading ? 'opacity-50' : ''"
               class="w-full rounded shadow-md bg-gradient-to-r from-red-800 to-pink-600 text-white p-2"
             >
-              <span v-if="!isLoading">Login</span>
+              <span v-if="!isLoading">Register</span>
               <span v-else>Loading...</span>
             </button>
           </div>
         </form>
-        <p v-if="showError" id="error">Username or Password is incorrect</p>
       </div>
     </div>
   </div>
@@ -53,6 +62,7 @@ export default {
     const state = reactive({
       form: {
         username: "",
+        full_name: "",
         password: "",
       },
     });
@@ -62,13 +72,9 @@ export default {
 
     const submit = async () => {
       isLoading.value = true;
-      const user = new FormData();
-      user.append("username", state.form.username);
-      user.append("password", state.form.password);
-
       try {
-        await store.dispatch("login", user);
-        router.push("/posts");
+        await store.dispatch("register", state.form);
+        router.push("posts");
         showError.value = false;
         isLoading.value = false;
       } catch (error) {

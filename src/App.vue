@@ -1,11 +1,16 @@
 <template>
-  <div id="nav">
-    <router-link to="/">Home</router-link> |
-    <router-link to="/login">Login</router-link>
+  <AppHeader />
+  <div class="w-full flex">
+    <router-view />
   </div>
-  <router-view />
 </template>
 
-<script></script>
+<script>
+import AppHeader from "./components/AppHeader";
+
+export default {
+  components: { AppHeader },
+};
+</script>
 
 <style></style>
