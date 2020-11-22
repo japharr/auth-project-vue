@@ -43,7 +43,7 @@
 </template>
 
 <script>
-import { computed, onMounted, reactive } from "vue";
+import { computed, reactive } from "vue";
 import { useStore } from "vuex";
 
 export default {
@@ -57,9 +57,7 @@ export default {
 
     const store = useStore();
 
-    onMounted(async () => {
-      await store.dispatch("getPosts");
-    });
+    //store.dispatch("getPosts");
 
     const user = computed(() => store.getters.user);
     const posts = computed(() => store.getters.posts);

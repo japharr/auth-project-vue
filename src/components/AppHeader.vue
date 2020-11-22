@@ -27,7 +27,7 @@
 
               <span v-if="isLoggedIn">
                 <a
-                  @click="logout"
+                  @click="logout()"
                   class="px-3 py-2 rounded-md text-sm font-medium text-gray-300 hover:text-white hover:bg-gray-700"
                   >Logout</a
                 >
@@ -54,17 +54,24 @@
 
 <script>
 import { ref, computed } from "vue";
-import { createStore } from "vuex";
+import { useStore } from "vuex";
+import { useRouter } from "vue-router";
 
 export default {
   setup() {
     const showProfileMenu = ref(false);
 
-    const store = createStore();
+    const store = useStore();
+    const router = useRouter();
 
     const isLoggedIn = computed(() => store.getters.isAuthenticated);
 
-    return { showProfileMenu, isLoggedIn };
+    const logout = () => {
+      store.dispatch("logout");
+      router.push("/login");
+    };
+
+    return { showProfileMenu, isLoggedIn, logout };
   },
 };
 </script>
